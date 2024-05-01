@@ -46,9 +46,18 @@ function renderBlogs(data) {
 }
 
 async function getImage(id) {
-  var res = await fetch(`${api_uri}/media/${id}`)
-  var data = await res.json()
-  return data.media_details.sizes.thumbnail.source_url
+  try {
+    var res = await fetch(`${api_uri}/media/${id}`);
+    var data = await res.json();
+    if (!res.ok) {
+        throw new Error('Network response was not ok.');
+    }
+    console.log('Fetched image data:', data); // Debugging: log the fetched data
+    return data.media_details.sizes.full.source_url;  // Assuming 'full' is the size you want; adjust as needed
+  } catch (error) {
+    console.error('Failed to fetch image:', error);
+    return 'path/to/default-image.jpg'; // Provide a fallback image path in case of failure
+  }
 }
 
 searchBtn.addEventListener('click', function (e) {
