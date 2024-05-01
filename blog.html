@@ -53,20 +53,7 @@
       data.forEach(async function (blog) {
         let { title, excerpt, featured_media } = blog;
 
-        async function getImage(id) {
-          try {
-            var res = await fetch(`${api_uri}/media/${id}`);
-            var data = await res.json();
-            if (!res.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            console.log('Fetched image data:', data); // Debugging: log the fetched data
-            return data.media_details.sizes.full.source_url;  // Assuming 'full' is the size you want; adjust as needed
-          } catch (error) {
-            console.error('Failed to fetch image:', error);
-            return 'path/to/default-image.jpg'; // Provide a fallback image path in case of failure
-          }
-        }
+        let img = await getImage(featured_media).catch(error => console.error('Failed to fetch image:', error));
         let div = document.createElement('div');
         div.className = 'col-md-8 py-3 m-auto';
         let card = `
